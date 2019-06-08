@@ -20,7 +20,7 @@ function(answer, callback) {
     var sc; 
 
     if(answer === this.correct) { 
-        console.log('Bingo! You\'re right!'); 
+        console.log('Bingo! Let motherboard bless you, savvy!'); 
         sc = callback(true); 
     } else { 
         console.log('Wrrrroooong.. Try again, buddy.'); 
@@ -119,7 +119,7 @@ function nextQuestion() {
     var answer = prompt('Hey, dude, guess the correct answer!'); 
 
     if(answer !== 'exit') {
-        questions[number].checkAnswer(parseInt(answer));  
+        questions[number].checkAnswer(parseInt(answer), keepScore);  
 
         nextQuestion(); 
     }
