@@ -16,12 +16,23 @@ function()  {
 } 
 
 Question.prototype.checkAnswer = 
-function(answer) { 
+function(answer, callback) { 
+    var sc; 
+
     if(answer === this.correct) { 
-        console.log('Bingo! You\'re right! God bless ya!'); 
+        console.log('Bingo! You\'re right!'); 
+        sc = callback(true); 
     } else { 
         console.log('Wrrrroooong.. Try again, buddy.'); 
-    }
+        sc = callback(false); 
+    } 
+    this.displayScore(sc); 
+} 
+
+Question.prototype.displayScore = 
+function(score) { 
+    console.log('Your current score is: ' + score); 
+    console.log('------------------------'); 
 }
 
 var q1 = new Question('Who is the father of Computer Science?', 
@@ -86,14 +97,34 @@ var q10 = new Question('Which protocol is used to send e-mail?',
 // put all the objects into one array
 var questions = [q1, q2, q3, q4, q5, q6, q7, q8, q9, q10]; 
 
-// randomize
-var number = Math.floor(Math.random() * questions.length);  
+// using closure
+function score() { 
+    var sc = 0;  
+    return function(correct) { 
+        if(correct) { 
+            sc++; 
+        }
+        return sc; 
+    }
+}
 
-questions[number].displayQuestion();
+var keepScore = score(); 
 
-//parseInt method will convert string to a number
-var answer = parseInt(prompt('Hey, dude, guess the correct answer!')); 
+function nextQuestion() { 
+    // randomize
+    var number = Math.floor(Math.random() * questions.length);  
 
-questions[number].checkAnswer(answer); 
+    questions[number].displayQuestion();
+
+    var answer = prompt('Hey, dude, guess the correct answer!'); 
+
+    if(answer !== 'exit') {
+        questions[number].checkAnswer(parseInt(answer));  
+
+        nextQuestion(); 
+    }
+}
+
+nextQuestion(); 
 
 })(); 
